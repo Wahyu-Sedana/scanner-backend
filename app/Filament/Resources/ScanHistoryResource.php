@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ScanHistoryResource\Pages;
 use App\Models\ScanHistory;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
@@ -20,6 +21,17 @@ class ScanHistoryResource extends Resource
 
     protected static ?string $navigationLabel = 'Scan History';
 
+    protected static ?string $navigationGroup = 'Monitoring';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $recordTitleAttribute = 'barcode';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return (string) static::getModel()::whereDate('created_at', today())->count();
+    }
+
     // History datang dari API tiap kali app scan barcode — bukan dibuat/diedit manual dari admin.
     public static function canCreate(): bool
     {
@@ -34,17 +46,23 @@ class ScanHistoryResource extends Resource
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
-            TextEntry::make('barcode')->fontFamily('mono'),
-            TextEntry::make('format'),
-            TextEntry::make('mode')->badge(),
-            TextEntry::make('status')->badge()
-                ->color(fn (string $state): string => $state === 'success' ? 'success' : 'danger'),
-            TextEntry::make('reason')->placeholder('—'),
-            TextEntry::make('scanned_by')
-                ->label('Discan oleh')
-                ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name ?? $record->passcode?->label)
-                ->placeholder('—'),
-            TextEntry::make('created_at')->label('Waktu scan')->dateTime(),
+            Section::make('Detail Scan')
+                ->icon('heroicon-o-qr-code')
+                ->columns(2)
+                ->schema([
+                    TextEntry::make('barcode')->fontFamily('mono'),
+                    TextEntry::make('format')->placeholder('—'),
+                    TextEntry::make('mode')->badge(),
+                    TextEntry::make('status')->badge()
+                        ->color(fn (string $state): string => $state === 'success' ? 'success' : 'danger'),
+                    TextEntry::make('reason')->placeholder('—')->columnSpanFull(),
+                    TextEntry::make('scanned_by')
+                        ->label('Discan oleh')
+                        ->icon('heroicon-o-user')
+                        ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name ?? $record->passcode?->label)
+                        ->placeholder('—'),
+                    TextEntry::make('created_at')->label('Waktu scan')->dateTime('d M Y, H:i'),
+                ]),
         ]);
     }
 
@@ -57,6 +75,12 @@ class ScanHistoryResource extends Resource
                     ->fontFamily('mono'),
                 Tables\Columns\TextColumn::make('mode')
                     ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'member' => 'info',
+                        'redeem' => 'warning',
+                        'event-ticket' => 'primary',
+                        default => 'gray',
+                    })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
