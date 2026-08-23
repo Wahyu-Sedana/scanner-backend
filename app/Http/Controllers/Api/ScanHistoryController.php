@@ -17,6 +17,10 @@ class ScanHistoryController extends Controller
             ->when($request->string('mode')->isNotEmpty(), fn ($query) => $query->where('mode', $request->string('mode')))
             ->when($request->string('status')->isNotEmpty(), fn ($query) => $query->where('status', $request->string('status')))
             ->when($request->string('environment')->isNotEmpty(), fn ($query) => $query->where('environment', $request->string('environment')))
+            ->when(
+                $request->string('passcode')->isNotEmpty(),
+                fn ($query) => $query->whereHas('passcode', fn ($query) => $query->where('code', $request->string('passcode')))
+            )
             ->latest()
             ->paginate($request->integer('per_page', 25));
 
