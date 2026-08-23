@@ -28,7 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName('Scanner')
             ->login()
-            
+            ->sidebarCollapsibleOnDesktop(true)
             ->colors([
                 'primary' => Color::Amber,
             ])

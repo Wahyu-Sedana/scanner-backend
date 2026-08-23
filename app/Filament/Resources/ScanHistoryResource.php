@@ -55,7 +55,24 @@ class ScanHistoryResource extends Resource
                     TextEntry::make('mode')->badge(),
                     TextEntry::make('status')->badge()
                         ->color(fn (string $state): string => $state === 'success' ? 'success' : 'danger'),
+                    TextEntry::make('environment')
+                        ->label('Environment')
+                        ->badge()
+                        ->color(fn (?string $state): string => $state === 'production' ? 'success' : 'warning')
+                        ->placeholder('—'),
                     TextEntry::make('reason')->placeholder('—')->columnSpanFull(),
+                    TextEntry::make('product_name')
+                        ->label('Produk')
+                        ->icon('heroicon-o-cube')
+                        ->placeholder('—'),
+                    TextEntry::make('customer_name')
+                        ->label('Nama pelanggan')
+                        ->icon('heroicon-o-identification')
+                        ->placeholder('—'),
+                    TextEntry::make('customer_phone')
+                        ->label('No HP pelanggan')
+                        ->icon('heroicon-o-device-phone-mobile')
+                        ->placeholder('—'),
                     TextEntry::make('scanned_by')
                         ->label('Discan oleh')
                         ->icon('heroicon-o-user')
@@ -86,10 +103,28 @@ class ScanHistoryResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => $state === 'success' ? 'success' : 'danger')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('environment')
+                    ->label('Environment')
+                    ->badge()
+                    ->color(fn (?string $state): string => $state === 'production' ? 'success' : 'warning')
+                    ->placeholder('—'),
                 Tables\Columns\TextColumn::make('reason')
                     ->limit(40)
                     ->placeholder('—')
                     ->toggleable(),
+                Tables\Columns\TextColumn::make('product_name')
+                    ->label('Produk')
+                    ->searchable()
+                    ->placeholder('—'),
+                Tables\Columns\TextColumn::make('customer_name')
+                    ->label('Pelanggan')
+                    ->searchable()
+                    ->placeholder('—'),
+                Tables\Columns\TextColumn::make('customer_phone')
+                    ->label('No HP pelanggan')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->placeholder('—'),
                 Tables\Columns\TextColumn::make('scanned_by')
                     ->label('Discan oleh')
                     ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name ?? $record->passcode?->label)
@@ -115,6 +150,12 @@ class ScanHistoryResource extends Resource
                     ->options([
                         'success' => 'Success',
                         'failed' => 'Failed',
+                    ]),
+                Tables\Filters\SelectFilter::make('environment')
+                    ->label('Environment')
+                    ->options([
+                        'staging' => 'Staging',
+                        'production' => 'Production',
                     ]),
             ])
             ->actions([

@@ -16,6 +16,7 @@ class ScanHistoryController extends Controller
             ->with(['passcode:id,label', 'passcode.employee:id,passcode_id,name'])
             ->when($request->string('mode')->isNotEmpty(), fn ($query) => $query->where('mode', $request->string('mode')))
             ->when($request->string('status')->isNotEmpty(), fn ($query) => $query->where('status', $request->string('status')))
+            ->when($request->string('environment')->isNotEmpty(), fn ($query) => $query->where('environment', $request->string('environment')))
             ->latest()
             ->paginate($request->integer('per_page', 25));
 
@@ -28,8 +29,12 @@ class ScanHistoryController extends Controller
             'barcode' => ['required', 'string'],
             'format' => ['nullable', 'string'],
             'mode' => ['required', 'in:member,redeem,event-ticket'],
+            'environment' => ['nullable', 'in:staging,production'],
             'status' => ['required', 'in:success,failed'],
             'reason' => ['nullable', 'string'],
+            'product_name' => ['nullable', 'string'],
+            'customer_name' => ['nullable', 'string'],
+            'customer_phone' => ['nullable', 'string'],
             'passcode' => ['nullable', 'string'],
         ]);
 
@@ -42,8 +47,12 @@ class ScanHistoryController extends Controller
             'barcode' => $data['barcode'],
             'format' => $data['format'] ?? null,
             'mode' => $data['mode'],
+            'environment' => $data['environment'] ?? null,
             'status' => $data['status'],
             'reason' => $data['reason'] ?? null,
+            'product_name' => $data['product_name'] ?? null,
+            'customer_name' => $data['customer_name'] ?? null,
+            'customer_phone' => $data['customer_phone'] ?? null,
             'passcode_id' => $passcodeId,
         ]);
 

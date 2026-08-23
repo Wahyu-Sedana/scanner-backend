@@ -11,8 +11,12 @@ class ScanHistory extends Model
         'barcode',
         'format',
         'mode',
+        'environment',
         'status',
         'reason',
+        'product_name',
+        'customer_name',
+        'customer_phone',
         'passcode_id',
     ];
 
