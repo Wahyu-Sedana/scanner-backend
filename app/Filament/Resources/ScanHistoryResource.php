@@ -76,7 +76,7 @@ class ScanHistoryResource extends Resource
                     TextEntry::make('scanned_by')
                         ->label('Discan oleh')
                         ->icon('heroicon-o-user')
-                        ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name ?? $record->passcode?->label)
+                        ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name)
                         ->placeholder('—'),
                     TextEntry::make('created_at')->label('Waktu scan')->dateTime('d M Y, H:i'),
                 ]),
@@ -127,10 +127,9 @@ class ScanHistoryResource extends Resource
                     ->placeholder('—'),
                 Tables\Columns\TextColumn::make('scanned_by')
                     ->label('Discan oleh')
-                    ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name ?? $record->passcode?->label)
+                    ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name)
                     ->searchable(query: fn (Builder $query, string $search): Builder => $query
-                        ->whereHas('passcode.employee', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"))
-                        ->orWhereHas('passcode', fn (Builder $query) => $query->where('label', 'like', "%{$search}%")))
+                        ->whereHas('passcode.employee', fn (Builder $query) => $query->where('name', 'like', "%{$search}%")))
                     ->placeholder('—'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Waktu')

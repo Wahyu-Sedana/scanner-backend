@@ -10,7 +10,6 @@ class Passcode extends Model
 {
     protected $fillable = [
         'code',
-        'label',
         'is_active',
     ];
 

@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         Passcode::firstOrCreate(
             ['code' => 'COCO1234'],
-            ['label' => 'Default', 'is_active' => true],
+            ['is_active' => true],
         );
 
         $this->call(EmployeeSeeder::class);

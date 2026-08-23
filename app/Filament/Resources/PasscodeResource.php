@@ -41,9 +41,6 @@ class PasscodeResource extends Resource
                             ->maxLength(64)
                             ->unique(ignoreRecord: true)
                             ->helperText('Kode yang diketik user di layar passcode.'),
-                        Forms\Components\TextInput::make('label')
-                            ->maxLength(64)
-                            ->helperText('Opsional, misalnya nama staff pemegang kode ini.'),
                         Forms\Components\Toggle::make('is_active')
                             ->inline(false)
                             ->required()
@@ -62,9 +59,6 @@ class PasscodeResource extends Resource
                     ->badge()
                     ->fontFamily('mono')
                     ->color('gray'),
-                Tables\Columns\TextColumn::make('label')
-                    ->searchable()
-                    ->placeholder('—'),
                 Tables\Columns\TextColumn::make('employee.name')
                     ->label('Dipegang oleh')
                     ->icon('heroicon-o-user')
