@@ -29,7 +29,7 @@ class ScanHistoryResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return (string) static::getModel()::whereDate('created_at', today())->count();
+        return (string) static::getModel()::count();
     }
 
     // History datang dari API tiap kali app scan barcode — bukan dibuat/diedit manual dari admin.

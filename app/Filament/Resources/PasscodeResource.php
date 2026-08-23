@@ -24,12 +24,7 @@ class PasscodeResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return (string) static::getModel()::where('is_active', true)->count();
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'success';
+        return (string) static::getModel()::count();
     }
 
     public static function form(Form $form): Form

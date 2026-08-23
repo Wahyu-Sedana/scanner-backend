@@ -28,6 +28,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName('Scanner')
             ->login()
+            
             ->colors([
                 'primary' => Color::Amber,
             ])

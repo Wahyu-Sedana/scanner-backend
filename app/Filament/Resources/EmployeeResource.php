@@ -34,12 +34,7 @@ class EmployeeResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return (string) static::getModel()::whereNull('passcode_id')->count();
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return static::getModel()::whereNull('passcode_id')->count() > 0 ? 'warning' : 'success';
+        return (string) static::getModel()::count();
     }
 
     public static function form(Form $form): Form
