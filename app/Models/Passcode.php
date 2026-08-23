@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Passcode extends Model
 {
@@ -21,5 +22,10 @@ class Passcode extends Model
     public function scanHistories(): HasMany
     {
         return $this->hasMany(ScanHistory::class);
+    }
+
+    public function employee(): HasOne
+    {
+        return $this->hasOne(Employee::class);
     }
 }

@@ -13,7 +13,7 @@ class ScanHistoryController extends Controller
     public function index(Request $request): JsonResponse
     {
         $entries = ScanHistory::query()
-            ->with('passcode:id,label')
+            ->with(['passcode:id,label', 'passcode.employee:id,passcode_id,name'])
             ->when($request->string('mode')->isNotEmpty(), fn ($query) => $query->where('mode', $request->string('mode')))
             ->when($request->string('status')->isNotEmpty(), fn ($query) => $query->where('status', $request->string('status')))
             ->latest()

@@ -10,6 +10,7 @@ use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ScanHistoryResource extends Resource
 {
@@ -39,7 +40,10 @@ class ScanHistoryResource extends Resource
             TextEntry::make('status')->badge()
                 ->color(fn (string $state): string => $state === 'success' ? 'success' : 'danger'),
             TextEntry::make('reason')->placeholder('—'),
-            TextEntry::make('passcode.label')->label('Discan oleh')->placeholder('—'),
+            TextEntry::make('scanned_by')
+                ->label('Discan oleh')
+                ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name ?? $record->passcode?->label)
+                ->placeholder('—'),
             TextEntry::make('created_at')->label('Waktu scan')->dateTime(),
         ]);
     }
@@ -62,14 +66,19 @@ class ScanHistoryResource extends Resource
                     ->limit(40)
                     ->placeholder('—')
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('passcode.label')
+                Tables\Columns\TextColumn::make('scanned_by')
                     ->label('Discan oleh')
+                    ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name ?? $record->passcode?->label)
+                    ->searchable(query: fn (Builder $query, string $search): Builder => $query
+                        ->whereHas('passcode.employee', fn (Builder $query) => $query->where('name', 'like', "%{$search}%"))
+                        ->orWhereHas('passcode', fn (Builder $query) => $query->where('label', 'like', "%{$search}%")))
                     ->placeholder('—'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Waktu')
                     ->dateTime()
                     ->sortable(),
             ])
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('passcode.employee'))
             ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('mode')

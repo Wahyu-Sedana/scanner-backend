@@ -22,5 +22,7 @@ class DatabaseSeeder extends Seeder
             ['code' => 'COCO1234'],
             ['label' => 'Default', 'is_active' => true],
         );
+
+        $this->call(EmployeeSeeder::class);
     }
 }

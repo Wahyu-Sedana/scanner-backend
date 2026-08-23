@@ -13,6 +13,7 @@ class PasscodeController extends Controller
     {
         $data = $request->validate([
             'code' => ['required', 'string'],
+            'phone' => ['required', 'string'],
         ]);
 
         $passcode = Passcode::where('code', $data['code'])
@@ -26,11 +27,20 @@ class PasscodeController extends Controller
             ], 422);
         }
 
+        $employee = $passcode->employee;
+
+        if (! $employee || $employee->phone !== $data['phone']) {
+            return response()->json([
+                'valid' => false,
+                'message' => 'Passcode dan nomor HP tidak sesuai.',
+            ], 422);
+        }
+
         $passcode->update(['last_used_at' => now()]);
 
         return response()->json([
             'valid' => true,
-            'label' => $passcode->label,
+            'label' => $employee->name,
         ]);
     }
 }
