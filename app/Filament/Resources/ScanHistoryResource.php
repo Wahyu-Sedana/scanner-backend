@@ -60,11 +60,11 @@ class ScanHistoryResource extends Resource
                         ->badge()
                         ->color(fn(?string $state): string => $state === 'production' ? 'success' : 'warning')
                         ->placeholder('—'),
-                    // TextEntry::make('reason')->placeholder('—')->columnSpanFull(),
-                    // TextEntry::make('product_name')
-                    //     ->label('Produk')
-                    //     ->icon('heroicon-o-cube')
-                    //     ->placeholder('—'),
+                    TextEntry::make('reason')->placeholder('—')->columnSpanFull(),
+                    TextEntry::make('product_name')
+                        ->label('Produk')
+                        ->icon('heroicon-o-cube')
+                        ->placeholder('—'),
                     TextEntry::make('customer_name')
                         ->label('Nama pelanggan')
                         ->icon('heroicon-o-identification')
@@ -108,14 +108,14 @@ class ScanHistoryResource extends Resource
                     ->badge()
                     ->color(fn(?string $state): string => $state === 'production' ? 'success' : 'warning')
                     ->placeholder('—'),
-                Tables\Columns\TextColumn::make('reason')
-                    ->limit(40)
-                    ->placeholder('—')
-                    ->toggleable(),
-                Tables\Columns\TextColumn::make('product_name')
-                    ->label('Produk')
-                    ->searchable()
-                    ->placeholder('—'),
+                // Tables\Columns\TextColumn::make('reason')
+                //     ->limit(40)
+                //     ->placeholder('—')
+                //     ->toggleable(),
+                // Tables\Columns\TextColumn::make('product_name')
+                //     ->label('Produk')
+                //     ->searchable()
+                //     ->placeholder('—'),
                 Tables\Columns\TextColumn::make('customer_name')
                     ->label('Pelanggan')
                     ->searchable()
