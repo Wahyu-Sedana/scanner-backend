@@ -54,17 +54,17 @@ class ScanHistoryResource extends Resource
                     TextEntry::make('format')->placeholder('—'),
                     TextEntry::make('mode')->badge(),
                     TextEntry::make('status')->badge()
-                        ->color(fn (string $state): string => $state === 'success' ? 'success' : 'danger'),
+                        ->color(fn(string $state): string => $state === 'success' ? 'success' : 'danger'),
                     TextEntry::make('environment')
                         ->label('Environment')
                         ->badge()
-                        ->color(fn (?string $state): string => $state === 'production' ? 'success' : 'warning')
+                        ->color(fn(?string $state): string => $state === 'production' ? 'success' : 'warning')
                         ->placeholder('—'),
-                    TextEntry::make('reason')->placeholder('—')->columnSpanFull(),
-                    TextEntry::make('product_name')
-                        ->label('Produk')
-                        ->icon('heroicon-o-cube')
-                        ->placeholder('—'),
+                    // TextEntry::make('reason')->placeholder('—')->columnSpanFull(),
+                    // TextEntry::make('product_name')
+                    //     ->label('Produk')
+                    //     ->icon('heroicon-o-cube')
+                    //     ->placeholder('—'),
                     TextEntry::make('customer_name')
                         ->label('Nama pelanggan')
                         ->icon('heroicon-o-identification')
@@ -76,7 +76,7 @@ class ScanHistoryResource extends Resource
                     TextEntry::make('scanned_by')
                         ->label('Discan oleh')
                         ->icon('heroicon-o-user')
-                        ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name)
+                        ->state(fn(ScanHistory $record): ?string => $record->passcode?->employee?->name)
                         ->placeholder('—'),
                     TextEntry::make('created_at')->label('Waktu scan')->dateTime('d M Y, H:i'),
                 ]),
@@ -92,7 +92,7 @@ class ScanHistoryResource extends Resource
                     ->fontFamily('mono'),
                 Tables\Columns\TextColumn::make('mode')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'member' => 'info',
                         'redeem' => 'warning',
                         'event-ticket' => 'primary',
@@ -101,12 +101,12 @@ class ScanHistoryResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn (string $state): string => $state === 'success' ? 'success' : 'danger')
+                    ->color(fn(string $state): string => $state === 'success' ? 'success' : 'danger')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('environment')
                     ->label('Environment')
                     ->badge()
-                    ->color(fn (?string $state): string => $state === 'production' ? 'success' : 'warning')
+                    ->color(fn(?string $state): string => $state === 'production' ? 'success' : 'warning')
                     ->placeholder('—'),
                 Tables\Columns\TextColumn::make('reason')
                     ->limit(40)
@@ -127,16 +127,16 @@ class ScanHistoryResource extends Resource
                     ->placeholder('—'),
                 Tables\Columns\TextColumn::make('scanned_by')
                     ->label('Discan oleh')
-                    ->state(fn (ScanHistory $record): ?string => $record->passcode?->employee?->name)
-                    ->searchable(query: fn (Builder $query, string $search): Builder => $query
-                        ->whereHas('passcode.employee', fn (Builder $query) => $query->where('name', 'like', "%{$search}%")))
+                    ->state(fn(ScanHistory $record): ?string => $record->passcode?->employee?->name)
+                    ->searchable(query: fn(Builder $query, string $search): Builder => $query
+                        ->whereHas('passcode.employee', fn(Builder $query) => $query->where('name', 'like', "%{$search}%")))
                     ->placeholder('—'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Waktu')
                     ->dateTime()
                     ->sortable(),
             ])
-            ->modifyQueryUsing(fn (Builder $query) => $query->with('passcode.employee'))
+            ->modifyQueryUsing(fn(Builder $query) => $query->with('passcode.employee'))
             ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('mode')
