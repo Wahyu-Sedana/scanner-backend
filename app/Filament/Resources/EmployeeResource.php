@@ -10,6 +10,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class EmployeeResource extends Resource
 {
@@ -113,6 +114,7 @@ class EmployeeResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('passcode'))
             ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\TernaryFilter::make('passcode_id')

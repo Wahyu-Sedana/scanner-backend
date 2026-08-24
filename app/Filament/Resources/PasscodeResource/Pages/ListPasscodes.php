@@ -2,11 +2,11 @@
 
 namespace App\Filament\Resources\PasscodeResource\Pages;
 
+use App\Filament\Pages\BaseListRecords;
 use App\Filament\Resources\PasscodeResource;
 use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
 
-class ListPasscodes extends ListRecords
+class ListPasscodes extends BaseListRecords
 {
     protected static string $resource = PasscodeResource::class;
 
